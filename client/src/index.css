@@ -78,7 +78,7 @@
   --chart-4: 38 92% 50%;
   --chart-5: 340 82% 52%;
 
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Segoe UI Arabic', 'Arabic Typesetting', sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: 'JetBrains Mono', Menlo, monospace;
   --radius: .5rem;
@@ -355,5 +355,22 @@
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
+  }
+
+  /* RTL support for Arabic */
+  .rtl {
+    direction: rtl;
+    text-align: right;
+  }
+
+  .ltr {
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* Ensure proper line height for Arabic text */
+  [lang="ar"],
+  .rtl {
+    line-height: 1.8;
   }
 }

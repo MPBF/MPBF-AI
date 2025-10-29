@@ -8,6 +8,12 @@ export const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY
 });
 
+// Detect if text contains Arabic characters
+function containsArabic(text: string): boolean {
+  const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return arabicRegex.test(text);
+}
+
 async function enrichContextWithBusinessData(userMessage: string): Promise<string> {
   let additionalContext = "";
 
@@ -17,8 +23,9 @@ async function enrichContextWithBusinessData(userMessage: string): Promise<strin
 
   const lowerMessage = userMessage.toLowerCase();
   
-  // Check if user is asking about emails
-  if (lowerMessage.includes('email') || lowerMessage.includes('mail') || lowerMessage.includes('inbox')) {
+  // Check if user is asking about emails (in English or Arabic)
+  if (lowerMessage.includes('email') || lowerMessage.includes('mail') || lowerMessage.includes('inbox') || 
+      userMessage.includes('بريد') || userMessage.includes('رسائل') || userMessage.includes('إيميل')) {
     try {
       const gmailService = new GmailService();
       const recentEmails = await gmailService.listMessages(5);
@@ -36,8 +43,9 @@ async function enrichContextWithBusinessData(userMessage: string): Promise<strin
     }
   }
 
-  // Check if user is asking about calendar/schedule/meetings
-  if (lowerMessage.includes('calendar') || lowerMessage.includes('meeting') || lowerMessage.includes('schedule') || lowerMessage.includes('event')) {
+  // Check if user is asking about calendar/schedule/meetings (in English or Arabic)
+  if (lowerMessage.includes('calendar') || lowerMessage.includes('meeting') || lowerMessage.includes('schedule') || lowerMessage.includes('event') ||
+      userMessage.includes('تقويم') || userMessage.includes('اجتماع') || userMessage.includes('موعد') || userMessage.includes('جدول')) {
     try {
       const calendarService = new GoogleCalendarService();
       const upcomingEvents = await calendarService.getUpcomingEvents(7);
@@ -71,11 +79,26 @@ export async function generateAIResponse(
   // Get the latest user message for context enrichment
   const latestUserMessage = messages.filter(m => m.role === 'user').slice(-1)[0]?.content || '';
   
+  // Detect if the user is writing in Arabic
+  const isArabic = containsArabic(latestUserMessage);
+  
   // Enrich context with business data if relevant
   const businessContext = await enrichContextWithBusinessData(latestUserMessage);
   
-  const baseSystemMessage = 
-    `You are Modern, an intelligent AI assistant working for AbuKhalid's company. Your role is to:
+  const baseSystemMessage = isArabic
+    ? `أنت مودرن، مساعد ذكاء اصطناعي ذكي يعمل لدى شركة أبو خالد. دورك هو:
+    - المساعدة في العمليات التجارية والمهام
+    - تذكر جميع المعلومات المشاركة معك
+    - اتباع التعليمات والأوامر من أبو خالد
+    - أن تكون محترفًا ومفيدًا واستباقيًا
+    - تعلم وفهم سياق العمل
+    - اقتراح التحسينات وتتبع المهام عند الاقتضاء
+    - الوصول إلى البيانات من الأنظمة التجارية المتصلة (Gmail، Google Calendar، إلخ) واستخدامها
+    
+    دائمًا استجب بطريقة مفيدة ومهنية وتذكر السياق من الرسائل السابقة.
+    
+    مهم جدًا: يجب أن تستجيب دائمًا باللغة العربية عندما يكتب المستخدم بالعربية، وبالإنجليزية عندما يكتب بالإنجليزية.`
+    : `You are Modern, an intelligent AI assistant working for AbuKhalid's company. Your role is to:
     - Help with business processes and tasks
     - Remember all information shared with you
     - Follow instructions and orders from AbuKhalid
@@ -84,7 +107,9 @@ export async function generateAIResponse(
     - Suggest improvements and track tasks when appropriate
     - Access and use data from connected business systems (Gmail, Google Calendar, etc.)
     
-    Always respond in a helpful, professional manner and remember context from previous messages.`;
+    Always respond in a helpful, professional manner and remember context from previous messages.
+    
+    Important: Always respond in the same language as the user. If they write in Arabic, respond in Arabic. If they write in English, respond in English.`;
   
   const systemMessage = systemContext || baseSystemMessage;
   const fullSystemMessage = businessContext 
