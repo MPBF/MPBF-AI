@@ -35,13 +35,13 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-4 border-b">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3" dir="rtl">
           <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center">
             <MessageSquare className="w-5 h-5 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold">Modern</h2>
-            <p className="text-xs text-muted-foreground">AI Assistant</p>
+            <h2 className="text-lg font-semibold">مودرن</h2>
+            <p className="text-xs text-muted-foreground">مساعد ذكي</p>
           </div>
         </div>
       </SidebarHeader>
@@ -56,33 +56,34 @@ export function AppSidebar() {
           >
             <Link href="/">
               <Plus className="w-4 h-4" />
-              New Conversation
+              <span dir="rtl">محادثة جديدة</span>
             </Link>
           </Button>
         </div>
 
         <div className="mb-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search conversations..."
+              placeholder="بحث في المحادثات..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="pr-9"
+              dir="rtl"
               data-testid="input-search-conversations"
             />
           </div>
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel dir="rtl">التنقل</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={location === "/"}>
                   <Link href="/" data-testid="link-chat">
                     <MessageSquare className="w-4 h-4" />
-                    <span>Chat</span>
+                    <span dir="rtl">المحادثة</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -90,7 +91,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={location === "/tasks"}>
                   <Link href="/tasks" data-testid="link-tasks">
                     <CheckSquare className="w-4 h-4" />
-                    <span>Tasks</span>
+                    <span dir="rtl">المهام</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -98,7 +99,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={location === "/knowledge"}>
                   <Link href="/knowledge" data-testid="link-knowledge">
                     <FileText className="w-4 h-4" />
-                    <span>Knowledge Base</span>
+                    <span dir="rtl">قاعدة المعرفة</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -106,7 +107,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={location === "/integrations"}>
                   <Link href="/integrations" data-testid="link-integrations">
                     <Plug className="w-4 h-4" />
-                    <span>Integrations</span>
+                    <span dir="rtl">التكاملات</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -115,13 +116,13 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup className="mt-4">
-          <SidebarGroupLabel>Recent Conversations</SidebarGroupLabel>
+          <SidebarGroupLabel dir="rtl">المحادثات الأخيرة</SidebarGroupLabel>
           <SidebarGroupContent>
             <ScrollArea className="h-[300px]">
               <SidebarMenu>
                 {filteredConversations.length === 0 ? (
-                  <div className="px-2 py-8 text-center text-sm text-muted-foreground">
-                    No conversations yet
+                  <div className="px-2 py-8 text-center text-sm text-muted-foreground" dir="rtl">
+                    لا توجد محادثات بعد
                   </div>
                 ) : (
                   filteredConversations.map((conversation) => (
@@ -132,7 +133,7 @@ export function AppSidebar() {
                           data-testid={`link-conversation-${conversation.id}`}
                         >
                           <MessageSquare className="w-4 h-4" />
-                          <span className="truncate">{conversation.title}</span>
+                          <span className="truncate" dir="auto">{conversation.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -145,15 +146,15 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-4 border-t">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3" dir="rtl">
           <Avatar>
             <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
               AK
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">AbuKhalid</p>
-            <p className="text-xs text-muted-foreground">Administrator</p>
+            <p className="text-sm font-medium truncate">أبو خالد</p>
+            <p className="text-xs text-muted-foreground">المدير</p>
           </div>
           <Button variant="ghost" size="icon" data-testid="button-settings">
             <Settings className="w-4 h-4" />

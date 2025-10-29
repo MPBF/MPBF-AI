@@ -185,12 +185,9 @@ export function ChatInterface({ messages, onSendMessage, isLoading = false, isTy
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <h3 className="text-2xl font-semibold mb-2">مرحباً أبو خالد!</h3>
+              <h3 className="text-2xl font-semibold mb-2" dir="rtl">مرحباً أبو خالد!</h3>
               <p className="text-muted-foreground max-w-md" dir="rtl">
                 أنا مودرن، مساعدك الذكي. أنا هنا لمساعدتك في العمليات التجارية والمهام وتذكر كل ما تشاركه معي. كيف يمكنني مساعدتك اليوم؟
-              </p>
-              <p className="text-muted-foreground max-w-md mt-2">
-                I'm Modern, your AI assistant. I support Arabic and English - just speak or type!
               </p>
             </div>
           )}
@@ -206,6 +203,7 @@ export function ChatInterface({ messages, onSendMessage, isLoading = false, isTy
                   "flex gap-3 items-start",
                   message.role === "user" ? "justify-end" : "justify-start"
                 )}
+                dir={dir}
                 data-testid={`message-${message.id}`}
               >
                 {message.role === "assistant" && (
@@ -290,7 +288,7 @@ export function ChatInterface({ messages, onSendMessage, isLoading = false, isTy
           <form onSubmit={handleSubmit} className="relative">
             <Textarea
               ref={textareaRef}
-              placeholder={containsArabic(input) ? "اكتب رسالتك..." : "Type your message..."}
+              placeholder="اكتب رسالتك..."
               value={input}
               onChange={handleInput}
               onKeyDown={handleKeyDown}
@@ -348,10 +346,8 @@ export function ChatInterface({ messages, onSendMessage, isLoading = false, isTy
               )}
             </Button>
           </form>
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            {containsArabic(input) 
-              ? "مودرن يتذكر كل شيء في هذه المحادثة" 
-              : "Modern remembers everything in this conversation"}
+          <p className="text-xs text-muted-foreground text-center mt-2" dir="rtl">
+            مودرن يتذكر كل شيء في هذه المحادثة
           </p>
         </div>
       </div>

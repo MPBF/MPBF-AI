@@ -44,14 +44,14 @@ export default function TasksPage() {
       setIsDialogOpen(false);
       setNewTask({ title: "", description: "" });
       toast({
-        title: "Success",
-        description: "Task created successfully",
+        title: "نجاح",
+        description: "تم إنشاء المهمة بنجاح",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
-        description: error.message || "Failed to create task",
+        title: "خطأ",
+        description: error.message || "فشل في إنشاء المهمة",
         variant: "destructive",
       });
     },
@@ -66,8 +66,8 @@ export default function TasksPage() {
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
-        description: error.message || "Failed to update task",
+        title: "خطأ",
+        description: error.message || "فشل في تحديث المهمة",
         variant: "destructive",
       });
     },
@@ -80,14 +80,14 @@ export default function TasksPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks"] });
       toast({
-        title: "Success",
-        description: "Task deleted successfully",
+        title: "نجاح",
+        description: "تم حذف المهمة بنجاح",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
-        description: error.message || "Failed to delete task",
+        title: "خطأ",
+        description: error.message || "فشل في حذف المهمة",
         variant: "destructive",
       });
     },
@@ -114,67 +114,69 @@ export default function TasksPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="max-w-6xl mx-auto p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6" dir="rtl">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Tasks</h1>
+            <h1 className="text-4xl font-bold mb-2">المهام</h1>
             <p className="text-muted-foreground">
-              Manage your tasks and track progress
+              إدارة المهام وتتبع التقدم
             </p>
           </div>
           <div className="flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" data-testid="button-export-tasks">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
+                  <Download className="w-4 h-4 ml-2" />
+                  <span dir="rtl">تصدير</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => exportTasksToJSON(tasks)}>
-                  Export as JSON
+                  <span dir="rtl">تصدير بصيغة JSON</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => exportTasksToCSV(tasks)}>
-                  Export as CSV
+                  <span dir="rtl">تصدير بصيغة CSV</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => exportTasksToMarkdown(tasks)}>
-                  Export as Markdown
+                  <span dir="rtl">تصدير بصيغة Markdown</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button data-testid="button-create-task">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Task
+                  <Plus className="w-4 h-4 ml-2" />
+                  <span dir="rtl">مهمة جديدة</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent dir="rtl">
               <DialogHeader>
-                <DialogTitle>Create New Task</DialogTitle>
+                <DialogTitle>إنشاء مهمة جديدة</DialogTitle>
                 <DialogDescription>
-                  Add a new task to track your work
+                  أضف مهمة جديدة لتتبع عملك
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div>
-                  <Label htmlFor="title">Title</Label>
+                  <Label htmlFor="title">العنوان</Label>
                   <Input
                     id="title"
-                    placeholder="Task title..."
+                    placeholder="عنوان المهمة..."
                     value={newTask.title}
                     onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                     data-testid="input-task-title"
+                    dir="auto"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="description">Description (optional)</Label>
+                  <Label htmlFor="description">الوصف (اختياري)</Label>
                   <Textarea
                     id="description"
-                    placeholder="Task description..."
+                    placeholder="وصف المهمة..."
                     value={newTask.description}
                     onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                     rows={3}
                     data-testid="input-task-description"
+                    dir="auto"
                   />
                 </div>
                 <Button
@@ -186,7 +188,7 @@ export default function TasksPage() {
                   {createTaskMutation.isPending ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    "Create Task"
+                    "إنشاء المهمة"
                   )}
                 </Button>
               </div>
@@ -195,31 +197,31 @@ export default function TasksPage() {
           </div>
         </div>
 
-        <Tabs defaultValue="all" className="w-full">
+        <Tabs defaultValue="all" className="w-full" dir="rtl">
           <TabsList>
             <TabsTrigger value="all" data-testid="tab-all-tasks">
-              All ({tasks.length})
+              الكل ({tasks.length})
             </TabsTrigger>
             <TabsTrigger value="pending" data-testid="tab-pending-tasks">
-              Pending ({pendingTasks.length})
+              قيد الانتظار ({pendingTasks.length})
             </TabsTrigger>
             <TabsTrigger value="in_progress" data-testid="tab-inprogress-tasks">
-              In Progress ({inProgressTasks.length})
+              قيد التنفيذ ({inProgressTasks.length})
             </TabsTrigger>
             <TabsTrigger value="completed" data-testid="tab-completed-tasks">
-              Completed ({completedTasks.length})
+              مكتملة ({completedTasks.length})
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-6 space-y-4">
             {tasks.length === 0 ? (
-              <div className="text-center py-12">
+              <div className="text-center py-12" dir="rtl">
                 <div className="w-16 h-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
                   <Plus className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No tasks yet</h3>
+                <h3 className="text-lg font-semibold mb-2">لا توجد مهام بعد</h3>
                 <p className="text-muted-foreground mb-4">
-                  Create your first task to get started
+                  أنشئ مهمتك الأولى للبدء
                 </p>
               </div>
             ) : (
@@ -236,8 +238,8 @@ export default function TasksPage() {
 
           <TabsContent value="pending" className="mt-6 space-y-4">
             {pendingTasks.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">No pending tasks</p>
+              <div className="text-center py-12" dir="rtl">
+                <p className="text-muted-foreground">لا توجد مهام قيد الانتظار</p>
               </div>
             ) : (
               pendingTasks.map((task) => (
@@ -253,8 +255,8 @@ export default function TasksPage() {
 
           <TabsContent value="in_progress" className="mt-6 space-y-4">
             {inProgressTasks.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">No tasks in progress</p>
+              <div className="text-center py-12" dir="rtl">
+                <p className="text-muted-foreground">لا توجد مهام قيد التنفيذ</p>
               </div>
             ) : (
               inProgressTasks.map((task) => (
@@ -270,8 +272,8 @@ export default function TasksPage() {
 
           <TabsContent value="completed" className="mt-6 space-y-4">
             {completedTasks.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">No completed tasks</p>
+              <div className="text-center py-12" dir="rtl">
+                <p className="text-muted-foreground">لا توجد مهام مكتملة</p>
               </div>
             ) : (
               completedTasks.map((task) => (

@@ -28,7 +28,7 @@ export function TaskCard({ task, onStatusChange, onDelete }: TaskCardProps) {
 
   return (
     <Card className="p-4 hover-elevate" data-testid={`task-card-${task.id}`}>
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3" dir="rtl">
         <Checkbox
           checked={isCompleted}
           onCheckedChange={handleCheckChange}
@@ -40,34 +40,34 @@ export function TaskCard({ task, onStatusChange, onDelete }: TaskCardProps) {
           <h3 className={cn(
             "text-base font-medium mb-1",
             isCompleted && "line-through text-muted-foreground"
-          )}>
+          )} dir="auto">
             {task.title}
           </h3>
           {task.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2">
+            <p className="text-sm text-muted-foreground line-clamp-2" dir="auto">
               {task.description}
             </p>
           )}
           <div className="flex items-center gap-2 mt-2">
             {isPending && (
               <Badge variant="secondary" className="text-xs">
-                <Clock className="w-3 h-3 mr-1" />
-                Pending
+                <Clock className="w-3 h-3 ml-1" />
+                قيد الانتظار
               </Badge>
             )}
             {task.status === "in_progress" && (
               <Badge variant="default" className="text-xs">
-                In Progress
+                قيد التنفيذ
               </Badge>
             )}
             {isCompleted && (
               <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-700 dark:text-green-400">
-                <Check className="w-3 h-3 mr-1" />
-                Completed
+                <Check className="w-3 h-3 ml-1" />
+                مكتملة
               </Badge>
             )}
             <span className="text-xs text-muted-foreground">
-              {new Date(task.createdAt).toLocaleDateString()}
+              {new Date(task.createdAt).toLocaleDateString('ar-SA')}
             </span>
           </div>
         </div>
@@ -81,24 +81,24 @@ export function TaskCard({ task, onStatusChange, onDelete }: TaskCardProps) {
           <DropdownMenuContent align="end">
             {isPending && (
               <DropdownMenuItem onClick={() => onStatusChange(task.id, "in_progress")}>
-                Mark In Progress
+                <span dir="rtl">وضع علامة قيد التنفيذ</span>
               </DropdownMenuItem>
             )}
             {task.status === "in_progress" && (
               <DropdownMenuItem onClick={() => onStatusChange(task.id, "completed")}>
-                Mark Completed
+                <span dir="rtl">وضع علامة مكتملة</span>
               </DropdownMenuItem>
             )}
             {isCompleted && (
               <DropdownMenuItem onClick={() => onStatusChange(task.id, "pending")}>
-                Reopen Task
+                <span dir="rtl">إعادة فتح المهمة</span>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem 
               onClick={() => onDelete(task.id)}
               className="text-destructive"
             >
-              Delete Task
+              <span dir="rtl">حذف المهمة</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
