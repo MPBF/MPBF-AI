@@ -33,33 +33,56 @@ Modern is an intelligent AI assistant designed to work as a personal assistant f
 
 ## Key Features
 
-### 1. Conversational AI Interface
+### 1. Bilingual (Arabic/English) Support ✨ NEW
+- **100% Arabic Language Capability:**
+  - Complete Arabic user interface with RTL (Right-to-Left) layout
+  - All pages translated: Chat, Sidebar, Tasks, Knowledge Base, Integrations
+  - Automatic text direction detection (RTL for Arabic, LTR for English)
+  - Dynamic dir attributes on all content elements
+- **Voice Input/Output in Arabic:**
+  - Speech-to-text (voice input) with Arabic (ar-SA) as default
+  - Text-to-speech (voice output) with automatic language detection
+  - Manual language toggle (🇸🇦/🇬🇧) for speech recognition
+  - Seamless switching between Arabic and English
+- **AI Language Matching:**
+  - OpenAI automatically detects user language and responds accordingly
+  - Conversation context maintained in user's preferred language
+  - Bilingual conversations supported (mix Arabic and English)
+- **Localized Formatting:**
+  - Dates formatted in Arabic locale (ar-SA)
+  - Arabic numerals and text rendering
+  - Proper RTL alignment for Arabic messages and content
+
+### 2. Conversational AI Interface
 - Chat with Modern using natural language
 - AI remembers conversation context across messages
 - Typing indicators and real-time message updates
 - Beautiful message bubbles with timestamps
 - Empty states with welcoming messages
+- Voice input/output support (Arabic and English)
 
-### 2. Task Management
+### 3. Task Management
 - Create, update, and delete tasks
 - Track task status (Pending, In Progress, Completed)
 - Filter tasks by status with tabs
 - Associate tasks with conversations
 - Checkbox for quick completion
+- Full Arabic translation with RTL support
 
-### 3. Knowledge Base
+### 4. Knowledge Base
 - Document business processes and procedures
 - Categorize knowledge entries
 - Add tags for organization
 - Search across all knowledge entries
 - Detailed view with full content
+- Full Arabic translation with RTL support
 
-### 4. Dark Mode Support
+### 5. Dark Mode Support
 - Toggle between light and dark themes
 - Persistent theme preference in localStorage
 - All components adapt to selected theme
 
-### 5. Export Functionality
+### 6. Export Functionality
 - Export tasks in JSON, CSV, or Markdown formats
 - Export knowledge base in JSON or Markdown formats
 - Client-side processing with automatic downloads
@@ -67,7 +90,7 @@ Modern is an intelligent AI assistant designed to work as a personal assistant f
 - CSV with proper escaping for special characters
 - Markdown with grouped sections by status/category
 
-### 6. Business Systems Integration
+### 7. Business Systems Integration
 - Gmail integration with OAuth authentication
 - Google Calendar integration with event management
 - View recent emails and unread count
@@ -76,7 +99,7 @@ Modern is an intelligent AI assistant designed to work as a personal assistant f
 - Unified integrations page with tabbed interface
 - Graceful degradation when integrations not connected
 
-### 7. Responsive Design
+### 8. Responsive Design
 - Works on desktop browsers
 - Optimized for mobile browsers
 - Tablet-friendly layouts
@@ -167,6 +190,17 @@ Note: All integration endpoints return 503 with `{available: false}` when integr
 - **User Preferences:** Professional, business-focused AI assistant
 
 ## Recent Changes
+- October 29, 2025: **Complete Arabic language support added**
+  - Full Arabic UI translation across all pages (Chat, Sidebar, Tasks, Knowledge, Integrations)
+  - RTL (Right-to-Left) layout support with automatic text direction detection
+  - Arabic voice input (speech-to-text) with ar-SA as default language
+  - Arabic voice output (text-to-speech) with automatic language detection
+  - Manual language toggle (🇸🇦/🇬🇧) for speech recognition control
+  - OpenAI integration enhanced to detect and respond in user's language (Arabic/English)
+  - Proper dir attributes on all content elements for correct RTL rendering
+  - Arabic date/time localization using ar-SA locale
+  - Bidirectional text support allowing mixed Arabic/English conversations
+
 - October 29, 2025: Business systems integration added
   - Gmail integration with OAuth via Replit connections
   - Google Calendar integration with event management

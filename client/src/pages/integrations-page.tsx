@@ -49,7 +49,7 @@ export default function IntegrationsPage() {
   });
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar-SA', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -71,39 +71,39 @@ export default function IntegrationsPage() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-6 border-b">
+      <div className="p-6 border-b" dir="rtl">
         <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">
-          Integrations
+          التكاملات
         </h1>
         <p className="text-muted-foreground">
-          Access your business systems and data
+          الوصول إلى أنظمة العمل والبيانات
         </p>
       </div>
 
-      <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 overflow-auto p-6" dir="rtl">
         <Tabs defaultValue="gmail" className="w-full">
           <TabsList className="mb-6">
             <TabsTrigger value="gmail" data-testid="tab-gmail">
-              <Mail className="w-4 h-4 mr-2" />
-              Gmail
+              <Mail className="w-4 h-4 ml-2" />
+              جيميل
               {unreadCount && unreadCount.count > 0 && (
-                <Badge variant="destructive" className="ml-2">
+                <Badge variant="destructive" className="mr-2">
                   {unreadCount.count}
                 </Badge>
               )}
             </TabsTrigger>
             <TabsTrigger value="calendar" data-testid="tab-calendar">
-              <Calendar className="w-4 h-4 mr-2" />
-              Calendar
+              <Calendar className="w-4 h-4 ml-2" />
+              التقويم
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="gmail">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Recent Emails</h2>
+                <h2 className="text-xl font-semibold">الرسائل الأخيرة</h2>
                 {unreadCount && unreadCount.count > 0 && (
-                  <Badge variant="secondary">{unreadCount.count} unread</Badge>
+                  <Badge variant="secondary">{unreadCount.count} غير مقروءة</Badge>
                 )}
               </div>
 
@@ -130,20 +130,20 @@ export default function IntegrationsPage() {
                       <CardHeader>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <CardTitle className="text-base mb-1 truncate">
-                              {email.subject || "(No subject)"}
+                            <CardTitle className="text-base mb-1 truncate" dir="auto">
+                              {email.subject || "(بدون موضوع)"}
                             </CardTitle>
                             <CardDescription className="flex items-center gap-2">
-                              <span className="truncate">{extractEmail(email.from)}</span>
+                              <span className="truncate" dir="ltr">{extractEmail(email.from)}</span>
                               <span className="text-xs">•</span>
                               <span className="text-xs whitespace-nowrap">{formatDate(email.date)}</span>
                             </CardDescription>
                           </div>
                           {email.labels?.includes('UNREAD') && (
-                            <Badge variant="default" className="ml-2">Unread</Badge>
+                            <Badge variant="default" className="mr-2">غير مقروءة</Badge>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2" dir="auto">
                           {email.snippet}
                         </p>
                       </CardHeader>
@@ -154,7 +154,7 @@ export default function IntegrationsPage() {
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Mail className="w-12 h-12 text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No emails found</p>
+                    <p className="text-muted-foreground">لا توجد رسائل</p>
                   </CardContent>
                 </Card>
               )}
@@ -163,7 +163,7 @@ export default function IntegrationsPage() {
 
           <TabsContent value="calendar">
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Upcoming Events</h2>
+              <h2 className="text-xl font-semibold">الأحداث القادمة</h2>
 
               {eventsLoading ? (
                 <div className="space-y-3">
@@ -188,7 +188,7 @@ export default function IntegrationsPage() {
                       <CardHeader>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <CardTitle className="text-base mb-1">
+                            <CardTitle className="text-base mb-1" dir="auto">
                               {event.summary}
                             </CardTitle>
                             <CardDescription className="space-y-1">
@@ -199,13 +199,13 @@ export default function IntegrationsPage() {
                               {event.location && (
                                 <div className="flex items-center gap-2">
                                   <MapPin className="w-3 h-3" />
-                                  <span className="text-xs truncate">{event.location}</span>
+                                  <span className="text-xs truncate" dir="auto">{event.location}</span>
                                 </div>
                               )}
                               {event.attendees && event.attendees.length > 0 && (
                                 <div className="flex items-center gap-2">
                                   <Users className="w-3 h-3" />
-                                  <span className="text-xs">{event.attendees.length} attendees</span>
+                                  <span className="text-xs">{event.attendees.length} مشارك</span>
                                 </div>
                               )}
                             </CardDescription>
@@ -232,7 +232,7 @@ export default function IntegrationsPage() {
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Calendar className="w-12 h-12 text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No upcoming events</p>
+                    <p className="text-muted-foreground">لا توجد أحداث قادمة</p>
                   </CardContent>
                 </Card>
               )}
@@ -242,27 +242,27 @@ export default function IntegrationsPage() {
       </div>
 
       <Dialog open={!!selectedEmail} onOpenChange={() => setSelectedEmail(null)}>
-        <DialogContent className="max-w-3xl max-h-[80vh]">
+        <DialogContent className="max-w-3xl max-h-[80vh]" dir="rtl">
           <DialogHeader>
-            <DialogTitle>{selectedEmail?.subject || "(No subject)"}</DialogTitle>
+            <DialogTitle dir="auto">{selectedEmail?.subject || "(بدون موضوع)"}</DialogTitle>
             <DialogDescription>
-              From: {selectedEmail && extractEmail(selectedEmail.from)}
+              من: <span dir="ltr">{selectedEmail && extractEmail(selectedEmail.from)}</span>
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="h-[500px] pr-4">
             <div className="space-y-4">
               <div className="text-sm">
-                <div className="font-semibold mb-1">To:</div>
-                <div className="text-muted-foreground">{selectedEmail?.to}</div>
+                <div className="font-semibold mb-1">إلى:</div>
+                <div className="text-muted-foreground" dir="ltr">{selectedEmail?.to}</div>
               </div>
               <div className="text-sm">
-                <div className="font-semibold mb-1">Date:</div>
+                <div className="font-semibold mb-1">التاريخ:</div>
                 <div className="text-muted-foreground">
                   {selectedEmail && formatDate(selectedEmail.date)}
                 </div>
               </div>
               <div className="pt-4 border-t">
-                <div className="whitespace-pre-wrap text-sm">
+                <div className="whitespace-pre-wrap text-sm" dir="auto">
                   {selectedEmail?.body || selectedEmail?.snippet}
                 </div>
               </div>
@@ -272,9 +272,9 @@ export default function IntegrationsPage() {
       </Dialog>
 
       <Dialog open={!!selectedEvent} onOpenChange={() => setSelectedEvent(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl" dir="rtl">
           <DialogHeader>
-            <DialogTitle>{selectedEvent?.summary}</DialogTitle>
+            <DialogTitle dir="auto">{selectedEvent?.summary}</DialogTitle>
             <DialogDescription>
               {selectedEvent && formatDate(selectedEvent.start)} - {selectedEvent && formatDate(selectedEvent.end)}
             </DialogDescription>
@@ -282,28 +282,28 @@ export default function IntegrationsPage() {
           <div className="space-y-4">
             {selectedEvent?.description && (
               <div>
-                <div className="font-semibold mb-2">Description</div>
-                <p className="text-sm text-muted-foreground">{selectedEvent.description}</p>
+                <div className="font-semibold mb-2">الوصف</div>
+                <p className="text-sm text-muted-foreground" dir="auto">{selectedEvent.description}</p>
               </div>
             )}
             {selectedEvent?.location && (
               <div>
                 <div className="font-semibold mb-2 flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
-                  Location
+                  الموقع
                 </div>
-                <p className="text-sm text-muted-foreground">{selectedEvent.location}</p>
+                <p className="text-sm text-muted-foreground" dir="auto">{selectedEvent.location}</p>
               </div>
             )}
             {selectedEvent?.attendees && selectedEvent.attendees.length > 0 && (
               <div>
                 <div className="font-semibold mb-2 flex items-center gap-2">
                   <Users className="w-4 h-4" />
-                  Attendees ({selectedEvent.attendees.length})
+                  المشاركون ({selectedEvent.attendees.length})
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {selectedEvent.attendees.map((email) => (
-                    <Badge key={email} variant="secondary">
+                    <Badge key={email} variant="secondary" dir="ltr">
                       {email}
                     </Badge>
                   ))}
@@ -314,8 +314,8 @@ export default function IntegrationsPage() {
               <div className="pt-4 border-t">
                 <Button asChild variant="outline" className="w-full">
                   <a href={selectedEvent.htmlLink} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Open in Google Calendar
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                    فتح في تقويم جوجل
                   </a>
                 </Button>
               </div>

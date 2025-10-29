@@ -61,14 +61,14 @@ export default function KnowledgePage() {
       setIsDialogOpen(false);
       setNewProcess({ title: "", description: "", category: "", content: "", tags: [] });
       toast({
-        title: "Success",
-        description: "Knowledge entry created successfully",
+        title: "نجاح",
+        description: "تم إنشاء إدخال المعرفة بنجاح",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
-        description: error.message || "Failed to create knowledge entry",
+        title: "خطأ",
+        description: error.message || "فشل في إنشاء إدخال المعرفة",
         variant: "destructive",
       });
     },
@@ -81,14 +81,14 @@ export default function KnowledgePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/knowledge"] });
       toast({
-        title: "Success",
-        description: "Knowledge entry deleted successfully",
+        title: "نجاح",
+        description: "تم حذف إدخال المعرفة بنجاح",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
-        description: error.message || "Failed to delete knowledge entry",
+        title: "خطأ",
+        description: error.message || "فشل في حذف إدخال المعرفة",
         variant: "destructive",
       });
     },
@@ -130,93 +130,97 @@ export default function KnowledgePage() {
   return (
     <div className="h-full overflow-auto">
       <div className="max-w-6xl mx-auto p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6" dir="rtl">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Knowledge Base</h1>
+            <h1 className="text-4xl font-bold mb-2">قاعدة المعرفة</h1>
             <p className="text-muted-foreground">
-              Business processes and documentation
+              العمليات التجارية والوثائق
             </p>
           </div>
           <div className="flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" data-testid="button-export-knowledge">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
+                  <Download className="w-4 h-4 ml-2" />
+                  <span dir="rtl">تصدير</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => exportKnowledgeToJSON(processes)}>
-                  Export as JSON
+                  <span dir="rtl">تصدير بصيغة JSON</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => exportKnowledgeToMarkdown(processes)}>
-                  Export as Markdown
+                  <span dir="rtl">تصدير بصيغة Markdown</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button data-testid="button-create-knowledge">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Knowledge
+                  <Plus className="w-4 h-4 ml-2" />
+                  <span dir="rtl">إضافة معرفة</span>
                 </Button>
               </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl" dir="rtl">
               <DialogHeader>
-                <DialogTitle>Add Knowledge Entry</DialogTitle>
+                <DialogTitle>إضافة إدخال معرفة</DialogTitle>
                 <DialogDescription>
-                  Document a business process or important information
+                  توثيق عملية تجارية أو معلومات مهمة
                 </DialogDescription>
               </DialogHeader>
               <ScrollArea className="max-h-[500px] pr-4">
                 <div className="space-y-4 mt-4">
                   <div>
-                    <Label htmlFor="title">Title</Label>
+                    <Label htmlFor="title">العنوان</Label>
                     <Input
                       id="title"
-                      placeholder="Process title..."
+                      placeholder="عنوان العملية..."
                       value={newProcess.title}
                       onChange={(e) => setNewProcess({ ...newProcess, title: e.target.value })}
                       data-testid="input-knowledge-title"
+                      dir="auto"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">الوصف</Label>
                     <Input
                       id="description"
-                      placeholder="Brief description..."
+                      placeholder="وصف مختصر..."
                       value={newProcess.description}
                       onChange={(e) => setNewProcess({ ...newProcess, description: e.target.value })}
                       data-testid="input-knowledge-description"
+                      dir="auto"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="category">Category</Label>
+                    <Label htmlFor="category">الفئة</Label>
                     <Input
                       id="category"
-                      placeholder="e.g., Sales, Marketing, Operations..."
+                      placeholder="مثال: المبيعات، التسويق، العمليات..."
                       value={newProcess.category}
                       onChange={(e) => setNewProcess({ ...newProcess, category: e.target.value })}
                       data-testid="input-knowledge-category"
+                      dir="auto"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="content">Content</Label>
+                    <Label htmlFor="content">المحتوى</Label>
                     <Textarea
                       id="content"
-                      placeholder="Detailed process documentation..."
+                      placeholder="توثيق العملية بالتفصيل..."
                       value={newProcess.content}
                       onChange={(e) => setNewProcess({ ...newProcess, content: e.target.value })}
                       rows={8}
                       data-testid="input-knowledge-content"
+                      dir="auto"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="tags">Tags</Label>
+                    <Label htmlFor="tags">الوسوم</Label>
                     <div className="flex gap-2">
                       <Input
                         id="tags"
-                        placeholder="Add a tag..."
+                        placeholder="أضف وسماً..."
                         value={tagInput}
                         onChange={(e) => setTagInput(e.target.value)}
                         onKeyDown={(e) => {
@@ -226,9 +230,10 @@ export default function KnowledgePage() {
                           }
                         }}
                         data-testid="input-knowledge-tag"
+                        dir="auto"
                       />
                       <Button type="button" onClick={handleAddTag} variant="secondary">
-                        Add
+                        إضافة
                       </Button>
                     </div>
                     {newProcess.tags.length > 0 && (
@@ -262,7 +267,7 @@ export default function KnowledgePage() {
                     {createProcessMutation.isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                      "Create Entry"
+                      "إنشاء الإدخال"
                     )}
                   </Button>
                 </div>
@@ -272,24 +277,25 @@ export default function KnowledgePage() {
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6" dir="rtl">
           <Input
-            placeholder="Search knowledge base..."
+            placeholder="البحث في قاعدة المعرفة..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             data-testid="input-search-knowledge"
+            dir="auto"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredProcesses.length === 0 ? (
-            <div className="col-span-2 text-center py-12">
+            <div className="col-span-2 text-center py-12" dir="rtl">
               <div className="w-16 h-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
                 <Plus className="w-8 h-8 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">No knowledge entries yet</h3>
+              <h3 className="text-lg font-semibold mb-2">لا توجد إدخالات معرفة بعد</h3>
               <p className="text-muted-foreground mb-4">
-                Start documenting your business processes
+                ابدأ بتوثيق عملياتك التجارية
               </p>
             </div>
           ) : (
@@ -305,26 +311,26 @@ export default function KnowledgePage() {
         </div>
 
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[80vh]">
+          <DialogContent className="max-w-4xl max-h-[80vh]" dir="rtl">
             <DialogHeader>
-              <DialogTitle>{selectedProcess?.title}</DialogTitle>
-              <DialogDescription>{selectedProcess?.description}</DialogDescription>
+              <DialogTitle dir="auto">{selectedProcess?.title}</DialogTitle>
+              <DialogDescription dir="auto">{selectedProcess?.description}</DialogDescription>
             </DialogHeader>
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
                 <div className="flex gap-2">
-                  <Badge variant="outline">{selectedProcess?.category}</Badge>
+                  <Badge variant="outline" dir="auto">{selectedProcess?.category}</Badge>
                   {selectedProcess?.tags?.map((tag) => (
-                    <Badge key={tag} variant="secondary">
+                    <Badge key={tag} variant="secondary" dir="auto">
                       {tag}
                     </Badge>
                   ))}
                 </div>
                 <div className="prose dark:prose-invert max-w-none">
-                  <p className="whitespace-pre-wrap">{selectedProcess?.content}</p>
+                  <p className="whitespace-pre-wrap" dir="auto">{selectedProcess?.content}</p>
                 </div>
                 <div className="text-xs text-muted-foreground pt-4 border-t">
-                  Last updated: {selectedProcess && new Date(selectedProcess.updatedAt).toLocaleString()}
+                  آخر تحديث: {selectedProcess && new Date(selectedProcess.updatedAt).toLocaleString('ar-SA')}
                 </div>
               </div>
             </ScrollArea>
