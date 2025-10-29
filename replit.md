@@ -144,6 +144,23 @@ businessProcesses
 - `POST /api/knowledge` - Create knowledge entry
 - `DELETE /api/knowledge/:id` - Delete knowledge entry
 
+#### Business Integrations
+Gmail:
+- `GET /api/gmail/messages` - List recent Gmail messages
+- `GET /api/gmail/messages/:id` - Get specific email details
+- `POST /api/gmail/send` - Send email via Gmail
+- `GET /api/gmail/unread-count` - Get unread message count
+
+Google Calendar:
+- `GET /api/calendar/events` - List all calendar events
+- `GET /api/calendar/events/upcoming` - Get upcoming events
+- `GET /api/calendar/events/:id` - Get specific event
+- `POST /api/calendar/events` - Create new calendar event
+- `PATCH /api/calendar/events/:id` - Update calendar event
+- `DELETE /api/calendar/events/:id` - Delete calendar event
+
+Note: All integration endpoints return 503 with `{available: false}` when integrations are not connected
+
 ## User Information
 - **Primary User:** AbuKhalid
 - **Role:** Administrator
