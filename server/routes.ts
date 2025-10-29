@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertTaskSchema, insertBusinessProcessSchema } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertTaskSchema, insertBusinessProcessSchema, updateSettingsSchema } from "@shared/schema";
 import { generateAIResponse } from "./openai";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 import { GmailService } from "./gmail";
@@ -441,6 +441,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(503).json({ error: "Calendar not connected", available: false });
       }
       res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Settings API
+  app.get("/api/settings", async (req, res) => {
+    try {
+      const settings = await storage.getSettings();
+      res.json(settings);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.patch("/api/settings", async (req, res) => {
+    try {
+      const data = updateSettingsSchema.parse(req.body);
+      const settings = await storage.updateSettings(data);
+      res.json(settings);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
     }
   });
 

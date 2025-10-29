@@ -10,6 +10,7 @@ import ChatPage from "@/pages/chat-page";
 import TasksPage from "@/pages/tasks-page";
 import KnowledgePage from "@/pages/knowledge-page";
 import IntegrationsPage from "@/pages/integrations-page";
+import SettingsPage from "@/pages/settings-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/tasks" component={TasksPage} />
       <Route path="/knowledge" component={KnowledgePage} />
       <Route path="/integrations" component={IntegrationsPage} />
+      <Route path="/settings" component={SettingsPage} />
       <Route component={NotFound} />
     </Switch>
   );

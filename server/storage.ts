@@ -3,6 +3,7 @@ import {
   messages,
   tasks,
   businessProcesses,
+  settings,
   type Conversation,
   type InsertConversation,
   type Message,
@@ -12,6 +13,8 @@ import {
   type UpdateTask,
   type BusinessProcess,
   type InsertBusinessProcess,
+  type Settings,
+  type UpdateSettings,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
@@ -40,6 +43,10 @@ export interface IStorage {
   getBusinessProcess(id: string): Promise<BusinessProcess | undefined>;
   createBusinessProcess(process: InsertBusinessProcess): Promise<BusinessProcess>;
   deleteBusinessProcess(id: string): Promise<void>;
+  
+  // Settings
+  getSettings(): Promise<Settings>;
+  updateSettings(updates: UpdateSettings): Promise<Settings>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -158,6 +165,35 @@ export class DatabaseStorage implements IStorage {
 
   async deleteBusinessProcess(id: string): Promise<void> {
     await db.delete(businessProcesses).where(eq(businessProcesses.id, id));
+  }
+
+  // Settings
+  async getSettings(): Promise<Settings> {
+    const [existingSettings] = await db.select().from(settings).limit(1);
+    
+    if (existingSettings) {
+      return existingSettings;
+    }
+    
+    // Create default settings if none exist
+    const [newSettings] = await db
+      .insert(settings)
+      .values({})
+      .returning();
+    
+    return newSettings;
+  }
+
+  async updateSettings(updates: UpdateSettings): Promise<Settings> {
+    const currentSettings = await this.getSettings();
+    
+    const [updatedSettings] = await db
+      .update(settings)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(settings.id, currentSettings.id))
+      .returning();
+    
+    return updatedSettings;
   }
 }
 

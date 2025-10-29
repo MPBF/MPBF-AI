@@ -113,3 +113,23 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+export const settings = pgTable("settings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  assistantName: text("assistant_name").notNull().default("Modern"),
+  systemInstructions: text("system_instructions").notNull().default("أنت مساعد ذكي متخصص في مساعدة الشركات. تتعلم من المحادثات السابقة وتتذكر كل شيء. ساعد المستخدم بطريقة احترافية ومنظمة."),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertSettingsSchema = createInsertSchema(settings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const updateSettingsSchema = insertSettingsSchema.partial();
+
+export type Settings = typeof settings.$inferSelect;
+export type InsertSettings = z.infer<typeof insertSettingsSchema>;
+export type UpdateSettings = z.infer<typeof updateSettingsSchema>;

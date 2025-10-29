@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { GmailService } from "./gmail";
 import { GoogleCalendarService } from "./googleCalendar";
+import { storage } from "./storage";
 
 // This is using Replit's AI Integrations service, which provides OpenAI-compatible API access without requiring your own OpenAI API key.
 export const openai = new OpenAI({
@@ -82,34 +83,54 @@ export async function generateAIResponse(
   // Detect if the user is writing in Arabic
   const isArabic = containsArabic(latestUserMessage);
   
+  // Get custom settings
+  const settings = await storage.getSettings();
+  
   // Enrich context with business data if relevant
   const businessContext = await enrichContextWithBusinessData(latestUserMessage);
   
+  // Use custom system instructions from settings or default
+  const customInstructions = settings.systemInstructions || (isArabic
+    ? `أنت مساعد ذكي متخصص في مساعدة الشركات. تتعلم من المحادثات السابقة وتتذكر كل شيء. ساعد المستخدم بطريقة احترافية ومنظمة.`
+    : `You are an intelligent assistant specialized in helping businesses. You learn from previous conversations and remember everything. Help the user in a professional and organized manner.`);
+  
+  const assistantName = settings.assistantName || "Modern";
+  
   const baseSystemMessage = isArabic
-    ? `أنت مودرن، مساعد ذكاء اصطناعي ذكي يعمل لدى شركة أبو خالد. دورك هو:
-    - المساعدة في العمليات التجارية والمهام
-    - تذكر جميع المعلومات المشاركة معك
-    - اتباع التعليمات والأوامر من أبو خالد
-    - أن تكون محترفًا ومفيدًا واستباقيًا
-    - تعلم وفهم سياق العمل
-    - اقتراح التحسينات وتتبع المهام عند الاقتضاء
-    - الوصول إلى البيانات من الأنظمة التجارية المتصلة (Gmail، Google Calendar، إلخ) واستخدامها
+    ? `أنت ${assistantName}، مساعد ذكاء اصطناعي ذكي يعمل لدى شركة أبو خالد.
     
-    دائمًا استجب بطريقة مفيدة ومهنية وتذكر السياق من الرسائل السابقة.
+توجيهاتك الأولية:
+${customInstructions}
+
+قدراتك:
+- المساعدة في العمليات التجارية والمهام
+- تذكر جميع المعلومات المشاركة معك
+- اتباع التعليمات والأوامر
+- أن تكون محترفًا ومفيدًا واستباقيًا
+- تعلم وفهم سياق العمل
+- اقتراح التحسينات وتتبع المهام عند الاقتضاء
+- الوصول إلى البيانات من الأنظمة التجارية المتصلة (Gmail، Google Calendar، إلخ) واستخدامها
+
+دائمًا استجب بطريقة مفيدة ومهنية وتذكر السياق من الرسائل السابقة.
+
+مهم جدًا: يجب أن تستجيب دائمًا باللغة العربية عندما يكتب المستخدم بالعربية، وبالإنجليزية عندما يكتب بالإنجليزية.`
+    : `You are ${assistantName}, an intelligent AI assistant working for AbuKhalid's company.
     
-    مهم جدًا: يجب أن تستجيب دائمًا باللغة العربية عندما يكتب المستخدم بالعربية، وبالإنجليزية عندما يكتب بالإنجليزية.`
-    : `You are Modern, an intelligent AI assistant working for AbuKhalid's company. Your role is to:
-    - Help with business processes and tasks
-    - Remember all information shared with you
-    - Follow instructions and orders from AbuKhalid
-    - Be professional, helpful, and proactive
-    - Learn and understand the business context
-    - Suggest improvements and track tasks when appropriate
-    - Access and use data from connected business systems (Gmail, Google Calendar, etc.)
-    
-    Always respond in a helpful, professional manner and remember context from previous messages.
-    
-    Important: Always respond in the same language as the user. If they write in Arabic, respond in Arabic. If they write in English, respond in English.`;
+Your Initial Instructions:
+${customInstructions}
+
+Your Capabilities:
+- Help with business processes and tasks
+- Remember all information shared with you
+- Follow instructions and orders
+- Be professional, helpful, and proactive
+- Learn and understand the business context
+- Suggest improvements and track tasks when appropriate
+- Access and use data from connected business systems (Gmail, Google Calendar, etc.)
+
+Always respond in a helpful, professional manner and remember context from previous messages.
+
+Important: Always respond in the same language as the user. If they write in Arabic, respond in Arabic. If they write in English, respond in English.`;
   
   const systemMessage = systemContext || baseSystemMessage;
   const fullSystemMessage = businessContext 

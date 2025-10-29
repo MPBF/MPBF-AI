@@ -111,6 +111,14 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={location === "/settings"}>
+                  <Link href="/settings" data-testid="link-settings">
+                    <Settings className="w-4 h-4" />
+                    <span dir="rtl">الإعدادات</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -156,8 +164,10 @@ export function AppSidebar() {
             <p className="text-sm font-medium truncate">أبو خالد</p>
             <p className="text-xs text-muted-foreground">المدير</p>
           </div>
-          <Button variant="ghost" size="icon" data-testid="button-settings">
-            <Settings className="w-4 h-4" />
+          <Button variant="ghost" size="icon" asChild data-testid="button-settings-footer">
+            <Link href="/settings">
+              <Settings className="w-4 h-4" />
+            </Link>
           </Button>
         </div>
       </SidebarFooter>
