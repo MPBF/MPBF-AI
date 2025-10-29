@@ -29,26 +29,26 @@ export function KnowledgeCard({ process, onView, onDelete }: KnowledgeCardProps)
         </div>
         
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold mb-1">{process.title}</h3>
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+          <h3 className="text-lg font-semibold mb-1" dir="auto">{process.title}</h3>
+          <p className="text-sm text-muted-foreground line-clamp-2 mb-3" dir="auto">
             {process.description}
           </p>
           
           <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs" dir="auto">
               {process.category}
             </Badge>
             {process.tags && process.tags.length > 0 && (
               <>
                 {process.tags.slice(0, 3).map((tag, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    <Tag className="w-3 h-3 mr-1" />
+                  <Badge key={index} variant="secondary" className="text-xs" dir="auto">
+                    <Tag className="w-3 h-3 ml-1" />
                     {tag}
                   </Badge>
                 ))}
                 {process.tags.length > 3 && (
                   <span className="text-xs text-muted-foreground">
-                    +{process.tags.length - 3} more
+                    +{process.tags.length - 3} أخرى
                   </span>
                 )}
               </>
@@ -56,7 +56,7 @@ export function KnowledgeCard({ process, onView, onDelete }: KnowledgeCardProps)
           </div>
           
           <p className="text-xs text-muted-foreground mt-2">
-            Updated {new Date(process.updatedAt).toLocaleDateString()}
+            تم التحديث {new Date(process.updatedAt).toLocaleDateString('ar-SA')}
           </p>
         </div>
 
@@ -71,7 +71,7 @@ export function KnowledgeCard({ process, onView, onDelete }: KnowledgeCardProps)
               e.stopPropagation();
               onView(process.id);
             }}>
-              View Details
+              عرض التفاصيل
             </DropdownMenuItem>
             <DropdownMenuItem 
               onClick={(e) => {
@@ -80,7 +80,7 @@ export function KnowledgeCard({ process, onView, onDelete }: KnowledgeCardProps)
               }}
               className="text-destructive"
             >
-              Delete
+              حذف
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
