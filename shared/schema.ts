@@ -16,6 +16,7 @@ export const messages = pgTable("messages", {
   conversationId: varchar("conversation_id").notNull().references(() => conversations.id, { onDelete: "cascade" }),
   role: text("role").notNull(),
   content: text("content").notNull(),
+  attachments: jsonb("attachments"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

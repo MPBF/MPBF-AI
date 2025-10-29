@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { insertConversationSchema, insertMessageSchema, insertTaskSchema, insertBusinessProcessSchema } from "@shared/schema";
 import { generateAIResponse } from "./openai";
+import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -233,6 +234,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Object Storage API
+  app.get("/objects/:objectPath(*)", async (req, res) => {
+    const objectStorageService = new ObjectStorageService();
+    try {
+      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+      objectStorageService.downloadObject(objectFile, res);
+    } catch (error) {
+      console.error("Error accessing object:", error);
+      if (error instanceof ObjectNotFoundError) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(500);
+    }
+  });
+
+  app.post("/api/objects/upload", async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
+    } catch (error: any) {
+      console.error("Error getting upload URL:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/attachments", async (req, res) => {
+    if (!req.body.attachmentURL) {
+      return res.status(400).json({ error: "attachmentURL is required" });
+    }
+
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const objectPath = objectStorageService.normalizeObjectEntityPath(req.body.attachmentURL);
+      
+      res.status(200).json({
+        objectPath: objectPath,
+      });
+    } catch (error: any) {
+      console.error("Error setting attachment:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 
