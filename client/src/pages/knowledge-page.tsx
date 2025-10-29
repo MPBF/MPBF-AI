@@ -3,7 +3,7 @@ import { KnowledgeCard } from "@/components/knowledge-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Loader2, X } from "lucide-react";
+import { Plus, Loader2, X, Download } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +25,7 @@ import type { BusinessProcess } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { exportKnowledgeToJSON, exportKnowledgeToMarkdown } from "@/lib/export";
 
 export default function KnowledgePage() {
   const { toast } = useToast();
@@ -130,13 +137,30 @@ export default function KnowledgePage() {
               Business processes and documentation
             </p>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button data-testid="button-create-knowledge">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Knowledge
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" data-testid="button-export-knowledge">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => exportKnowledgeToJSON(processes)}>
+                  Export as JSON
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportKnowledgeToMarkdown(processes)}>
+                  Export as Markdown
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button data-testid="button-create-knowledge">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Knowledge
+                </Button>
+              </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Add Knowledge Entry</DialogTitle>
@@ -244,7 +268,8 @@ export default function KnowledgePage() {
                 </div>
               </ScrollArea>
             </DialogContent>
-          </Dialog>
+            </Dialog>
+          </div>
         </div>
 
         <div className="mb-6">
