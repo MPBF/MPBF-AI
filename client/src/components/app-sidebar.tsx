@@ -1,4 +1,4 @@
-import { MessageSquare, Plus, Search, CheckSquare, FileText, Settings } from "lucide-react";
+import { MessageSquare, Plus, Search, CheckSquare, FileText, Settings, Plug } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import {
   Sidebar,
@@ -99,6 +99,14 @@ export function AppSidebar() {
                   <Link href="/knowledge" data-testid="link-knowledge">
                     <FileText className="w-4 h-4" />
                     <span>Knowledge Base</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={location === "/integrations"}>
+                  <Link href="/integrations" data-testid="link-integrations">
+                    <Plug className="w-4 h-4" />
+                    <span>Integrations</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

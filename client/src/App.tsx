@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import ChatPage from "@/pages/chat-page";
 import TasksPage from "@/pages/tasks-page";
 import KnowledgePage from "@/pages/knowledge-page";
+import IntegrationsPage from "@/pages/integrations-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/chat/:id" component={ChatPage} />
       <Route path="/tasks" component={TasksPage} />
       <Route path="/knowledge" component={KnowledgePage} />
+      <Route path="/integrations" component={IntegrationsPage} />
       <Route component={NotFound} />
     </Switch>
   );

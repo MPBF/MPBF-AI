@@ -5,6 +5,8 @@ import { storage } from "./storage";
 import { insertConversationSchema, insertMessageSchema, insertTaskSchema, insertBusinessProcessSchema } from "@shared/schema";
 import { generateAIResponse } from "./openai";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+import { GmailService } from "./gmail";
+import { GoogleCalendarService } from "./googleCalendar";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -278,6 +280,167 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Error setting attachment:", error);
       res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Gmail API
+  app.get("/api/gmail/messages", async (req, res) => {
+    try {
+      const gmailService = new GmailService();
+      const maxResults = req.query.maxResults ? parseInt(req.query.maxResults as string) : 20;
+      const query = req.query.q as string | undefined;
+      const messages = await gmailService.listMessages(maxResults, query);
+      res.json(messages);
+    } catch (error: any) {
+      console.error("Gmail error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Gmail not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/gmail/messages/:id", async (req, res) => {
+    try {
+      const gmailService = new GmailService();
+      const message = await gmailService.getMessage(req.params.id);
+      if (!message) {
+        return res.status(404).json({ error: "Message not found" });
+      }
+      res.json(message);
+    } catch (error: any) {
+      console.error("Gmail error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Gmail not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/gmail/send", async (req, res) => {
+    try {
+      const gmailService = new GmailService();
+      const { to, subject, body, cc, bcc } = req.body;
+      if (!to || !subject || !body) {
+        return res.status(400).json({ error: "to, subject, and body are required" });
+      }
+      const result = await gmailService.sendMessage({ to, subject, body, cc, bcc });
+      res.json(result);
+    } catch (error: any) {
+      console.error("Gmail send error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Gmail not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/gmail/unread-count", async (req, res) => {
+    try {
+      const gmailService = new GmailService();
+      const count = await gmailService.getUnreadCount();
+      res.json({ count });
+    } catch (error: any) {
+      console.error("Gmail error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Gmail not connected", available: false, count: 0 });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Google Calendar API
+  app.get("/api/calendar/events", async (req, res) => {
+    try {
+      const calendarService = new GoogleCalendarService();
+      const maxResults = req.query.maxResults ? parseInt(req.query.maxResults as string) : 20;
+      const timeMin = req.query.timeMin as string | undefined;
+      const events = await calendarService.listEvents(maxResults, timeMin);
+      res.json(events);
+    } catch (error: any) {
+      console.error("Calendar error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Calendar not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/calendar/events/upcoming", async (req, res) => {
+    try {
+      const calendarService = new GoogleCalendarService();
+      const days = req.query.days ? parseInt(req.query.days as string) : 7;
+      const events = await calendarService.getUpcomingEvents(days);
+      res.json(events);
+    } catch (error: any) {
+      console.error("Calendar error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Calendar not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/calendar/events/:id", async (req, res) => {
+    try {
+      const calendarService = new GoogleCalendarService();
+      const event = await calendarService.getEvent(req.params.id);
+      if (!event) {
+        return res.status(404).json({ error: "Event not found" });
+      }
+      res.json(event);
+    } catch (error: any) {
+      console.error("Calendar error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Calendar not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/calendar/events", async (req, res) => {
+    try {
+      const calendarService = new GoogleCalendarService();
+      const { summary, description, start, end, location, attendees } = req.body;
+      if (!summary || !start || !end) {
+        return res.status(400).json({ error: "summary, start, and end are required" });
+      }
+      const event = await calendarService.createEvent({ summary, description, start, end, location, attendees });
+      res.json(event);
+    } catch (error: any) {
+      console.error("Calendar create error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Calendar not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.patch("/api/calendar/events/:id", async (req, res) => {
+    try {
+      const calendarService = new GoogleCalendarService();
+      const event = await calendarService.updateEvent(req.params.id, req.body);
+      res.json(event);
+    } catch (error: any) {
+      console.error("Calendar update error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Calendar not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/calendar/events/:id", async (req, res) => {
+    try {
+      const calendarService = new GoogleCalendarService();
+      await calendarService.deleteEvent(req.params.id);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Calendar delete error:", error);
+      if (error.message?.includes('not connected') || error.message?.includes('X_REPLIT_TOKEN')) {
+        return res.status(503).json({ error: "Calendar not connected", available: false });
+      }
+      res.status(500).json({ error: error.message });
     }
   });
 

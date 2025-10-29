@@ -67,7 +67,16 @@ Modern is an intelligent AI assistant designed to work as a personal assistant f
 - CSV with proper escaping for special characters
 - Markdown with grouped sections by status/category
 
-### 6. Responsive Design
+### 6. Business Systems Integration
+- Gmail integration with OAuth authentication
+- Google Calendar integration with event management
+- View recent emails and unread count
+- Display upcoming calendar events
+- AI can access and reference email/calendar data in responses
+- Unified integrations page with tabbed interface
+- Graceful degradation when integrations not connected
+
+### 7. Responsive Design
 - Works on desktop browsers
 - Optimized for mobile browsers
 - Tablet-friendly layouts
@@ -141,6 +150,16 @@ businessProcesses
 - **User Preferences:** Professional, business-focused AI assistant
 
 ## Recent Changes
+- October 29, 2025: Business systems integration added
+  - Gmail integration with OAuth via Replit connections
+  - Google Calendar integration with event management
+  - Backend services: GmailService and GoogleCalendarService
+  - API endpoints for emails, calendar events, sending messages
+  - Frontend integrations page with tabbed interface
+  - Enhanced AI context enrichment with email/calendar data
+  - Graceful error handling and degradation when services unavailable
+  - Per-request service instantiation for proper auth token handling
+
 - October 29, 2025: Export functionality added
   - Implemented export library for Tasks and Knowledge Base
   - Tasks export: JSON, CSV, and Markdown formats
